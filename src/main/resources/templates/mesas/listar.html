@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesas - Sabor Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d4a574;
+            --secondary-color: #2c3e50;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .table {
+            background: white;
+            border-radius: 8px;
+        }
+
+        .table thead th {
+            background-color: #ecf0f1;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: none;
+        }
+
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .badge-available {
+            background-color: #27ae60;
+        }
+
+        .badge-reserved {
+            background-color: #f39c12;
+        }
+
+        .badge-occupied {
+            background-color: #c0392b;
+        }
+
+        .badge-maintenance {
+            background-color: #95a5a6;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f5;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/sabor-gourmet/">
+                <i class="fas fa-utensils" style="color: var(--primary-color);"></i> Sabor Gourmet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/reservas">
+                            <i class="fas fa-calendar-alt"></i> Reservas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/clientes">
+                            <i class="fas fa-users"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/sabor-gourmet/mesas">
+                            <i class="fas fa-table"></i> Mesas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-chair"></i> Gestión de Mesas</h1>
+            <p class="mb-0">Total de mesas: <strong th:text="${mesas.size()}">0</strong></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <a href="/sabor-gourmet/mesas/nuevo" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Nueva Mesa
+                </a>
+                <a href="/sabor-gourmet/mesas/disponibles" class="btn btn-info">
+                    <i class="fas fa-chair"></i> Ver Disponibles
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Número Mesa</th>
+                            <th>Capacidad</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="mesa : ${mesas}">
+                            <td th:text="${mesa.id}">1</td>
+                            <td th:text="${mesa.numeroMesa}">1</td>
+                            <td th:text="${mesa.capacidad}">4</td>
+                            <td th:text="${mesa.ubicacion}">Ventana</td>
+                            <td>
+                                <span th:class="'badge badge-' + ${mesa.estado.name().toLowerCase()}"
+                                      th:text="${mesa.estado.name()}">
+                                    DISPONIBLE
+                                </span>
+                            </td>
+                            <td>
+                                <a th:href="@{/mesas/{id}(id=${mesa.id})}"
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a th:href="@{/mesas/editar/{id}(id=${mesa.id})}"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form th:action="@{/mesas/{id}/eliminar(id=${mesa.id})}"
+                                      method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('¿Eliminar esta mesa?');">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${mesas.isEmpty()}">
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox"></i> No hay mesas registradas
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--secondary-color); color: #ecf0f1; padding: 20px 0; margin-top: 40px; text-align: center; border-top: 3px solid var(--primary-color);">
+        <div class="container-fluid">
+            <p class="mb-0">
+                <i class="fas fa-copyright"></i> Sabor Gourmet - Sistema de Reservas
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
