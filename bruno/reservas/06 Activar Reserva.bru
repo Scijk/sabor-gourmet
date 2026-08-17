@@ -1,0 +1,61 @@
+meta {
+  name: Activar Reserva
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}/activar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Activar Reserva
+
+  Cambia el estado de una reserva a ACTIVA (cliente presente en el restaurante).
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a activar (ej: 1)
+
+  ## Flujo de Estados
+  - CONFIRMADA → **ACTIVA**
+
+  ## Acciones Asociadas
+  - La mesa cambia de estado a OCUPADA
+  - Se registra la hora de activación
+
+  ## Restricciones
+  - La reserva debe estar en estado CONFIRMADA
+  - La mesa debe estar disponible
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez"
+    },
+    "mesa": {
+      "id": 1,
+      "numeroMesa": "1",
+      "estado": "OCUPADA"
+    },
+    "fechaReserva": "2024-08-20T19:00:00",
+    "numeroComensales": 4,
+    "estado": "ACTIVA",
+    "fechaModificacion": "2024-08-20T19:15:00"
+  }
+  ```
+
+  ## Errores Posibles
+  - **HTTP 400 Bad Request**: Reserva no está en estado CONFIRMADA
+  - **HTTP 404 Not Found**: Reserva no existe
+}
+

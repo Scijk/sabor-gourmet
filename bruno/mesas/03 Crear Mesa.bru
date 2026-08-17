@@ -1,0 +1,52 @@
+meta {
+  name: Crear Mesa
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/mesas
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "numeroMesa": "14",
+    "capacidad": 8,
+    "ubicacion": "Sector C - Esquina"
+  }
+}
+
+docs {
+  # Crear Mesa
+
+  Crea una nueva mesa en el sistema.
+
+  ## Parámetros de Body (JSON)
+  - `numeroMesa`: Número/identificador único de la mesa (requerido, ej: "1", "A1")
+  - `capacidad`: Número de personas que puede sentarse (requerido, 1-20)
+  - `ubicacion`: Descripción de la ubicación (opcional, máx 200 caracteres)
+
+  ## Validaciones
+  - El número de mesa debe ser único
+  - La capacidad debe estar entre 1 y 20 personas
+  - Una mesa nueva siempre inicia en estado DISPONIBLE
+
+  ## Respuesta
+  ```json
+  {
+    "id": 14,
+    "numeroMesa": "14",
+    "capacidad": 8,
+    "ubicacion": "Sector C - Esquina",
+    "estado": "DISPONIBLE"
+  }
+  ```
+}
+

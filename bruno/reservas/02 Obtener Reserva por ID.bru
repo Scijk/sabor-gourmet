@@ -1,0 +1,53 @@
+meta {
+  name: Obtener Reserva por ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/reservas/{{reserva_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Obtener Reserva por ID
+
+  Obtiene los detalles completos de una reserva específica.
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva (ej: 1)
+
+  ## Respuesta
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "email": "juan@example.com",
+      "telefono": "1234567890"
+    },
+    "mesa": {
+      "id": 1,
+      "numeroMesa": "1",
+      "capacidad": 4,
+      "ubicacion": "Sector A - Ventana"
+    },
+    "fechaReserva": "2024-08-20T19:00:00",
+    "numeroComensales": 4,
+    "observaciones": "Cumpleaños de María",
+    "estado": "CONFIRMADA",
+    "fechaCreacion": "2024-08-15T10:00:00",
+    "fechaModificacion": "2024-08-15T11:00:00",
+    "fechaCancelacion": null,
+    "motivoCancelacion": null
+  }
+  ```
+}
+

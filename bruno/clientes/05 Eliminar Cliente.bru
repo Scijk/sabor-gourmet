@@ -1,0 +1,35 @@
+meta {
+  name: Eliminar Cliente
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/clientes/{{cliente_id}}/eliminar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Eliminar Cliente
+
+  Elimina un cliente del sistema.
+
+  ## Parámetros de Ruta
+  - `cliente_id`: ID del cliente a eliminar (ej: 1)
+
+  ## Restricciones
+  - Si el cliente tiene reservas activas, no se puede eliminar
+  - Se recomienda desactivar en lugar de eliminar
+
+  ## Respuesta
+  - **HTTP 200 OK**: Cliente eliminado exitosamente
+  - **HTTP 400 Bad Request**: Cliente no se puede eliminar (tiene reservas activas)
+  - **HTTP 404 Not Found**: Cliente no existe
+}
+

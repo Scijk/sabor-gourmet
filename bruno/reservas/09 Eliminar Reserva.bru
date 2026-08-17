@@ -1,0 +1,40 @@
+meta {
+  name: Eliminar Reserva
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}/eliminar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Eliminar Reserva
+
+  Elimina permanentemente una reserva del sistema.
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a eliminar (ej: 1)
+
+  ## Restricciones
+  - La reserva debe estar en estado CANCELADA o COMPLETADA
+  - No se pueden eliminar reservas activas
+  - Esta acción es irreversible
+
+  ## Recomendaciones
+  - Usar CANCELAR en lugar de ELIMINAR para reservas futuras
+  - Solo eliminar registros viejos/completados
+
+  ## Respuesta
+  - **HTTP 200 OK**: Reserva eliminada exitosamente
+  - **HTTP 400 Bad Request**: Reserva no puede ser eliminada (estado no permitido)
+  - **HTTP 404 Not Found**: Reserva no existe
+}
+

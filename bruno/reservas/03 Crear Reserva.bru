@@ -1,0 +1,69 @@
+meta {
+  name: Crear Reserva
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/reservas
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "clienteId": 5,
+    "mesaId": 3,
+    "fechaReserva": "2024-08-25T20:00:00",
+    "numeroComensales": 4,
+    "observaciones": "Cumpleaños - Traer pastel"
+  }
+}
+
+docs {
+  # Crear Reserva
+
+  Crea una nueva reserva en el sistema.
+
+  ## Parámetros de Body (JSON)
+  - `clienteId`: ID del cliente (requerido)
+  - `mesaId`: ID de la mesa (requerido)
+  - `fechaReserva`: Fecha y hora de la reserva en formato ISO (requerido, ej: "2024-08-25T20:00:00")
+  - `numeroComensales`: Número de personas (requerido, 1-20)
+  - `observaciones`: Notas adicionales (opcional, máx 500 caracteres)
+
+  ## Validaciones
+  - El cliente debe existir
+  - La mesa debe existir y estar disponible en esa hora
+  - La fecha no puede ser en el pasado
+  - El número de comensales no puede exceder la capacidad de la mesa
+  - No pueden haber 2+ reservas para la misma mesa con menos de 2 horas de diferencia
+  - Una reserva nueva siempre inicia en estado PENDIENTE
+
+  ## Respuesta (HTTP 201 Created)
+  ```json
+  {
+    "id": 37,
+    "cliente": {
+      "id": 5,
+      "nombre": "María García"
+    },
+    "mesa": {
+      "id": 3,
+      "numeroMesa": "3",
+      "capacidad": 6
+    },
+    "fechaReserva": "2024-08-25T20:00:00",
+    "numeroComensales": 4,
+    "observaciones": "Cumpleaños - Traer pastel",
+    "estado": "PENDIENTE",
+    "fechaCreacion": "2024-08-16T14:30:00"
+  }
+  ```
+}
+

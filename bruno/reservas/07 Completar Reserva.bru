@@ -1,0 +1,61 @@
+meta {
+  name: Completar Reserva
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}/completar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Completar Reserva
+
+  Cambia el estado de una reserva a COMPLETADA (cliente se fue).
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a completar (ej: 1)
+
+  ## Flujo de Estados
+  - ACTIVA → **COMPLETADA**
+
+  ## Acciones Asociadas
+  - La mesa cambia de estado a DISPONIBLE
+  - Se registra la hora de finalización
+  - La reserva se marca como completada en historial
+
+  ## Restricciones
+  - La reserva debe estar en estado ACTIVA
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez"
+    },
+    "mesa": {
+      "id": 1,
+      "numeroMesa": "1",
+      "estado": "DISPONIBLE"
+    },
+    "fechaReserva": "2024-08-20T19:00:00",
+    "numeroComensales": 4,
+    "estado": "COMPLETADA",
+    "fechaModificacion": "2024-08-20T21:30:00"
+  }
+  ```
+
+  ## Errores Posibles
+  - **HTTP 400 Bad Request**: Reserva no está en estado ACTIVA
+  - **HTTP 404 Not Found**: Reserva no existe
+}
+
