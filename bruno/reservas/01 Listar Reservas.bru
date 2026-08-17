@@ -1,0 +1,73 @@
+meta {
+  name: Listar Reservas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/reservas
+  body: none
+  auth: none
+}
+
+query {
+  ~ page: 0
+  ~ size: 10
+  ~ sort: fechaReserva,desc
+  ~ estado: CONFIRMADA
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Listar Reservas
+
+  Obtiene la lista paginada de todas las reservas.
+
+  ## Parámetros de Query (Opcionales)
+  - `page`: Número de página (por defecto 0)
+  - `size`: Cantidad de registros por página (por defecto 10)
+  - `sort`: Campo y dirección de ordenamiento (ej: fechaReserva,desc)
+  - `estado`: Filtrar por estado (PENDIENTE, CONFIRMADA, ACTIVA, COMPLETADA, CANCELADA)
+
+  ## Estados Posibles
+  - **PENDIENTE**: Reserva recién creada, pendiente de confirmación
+  - **CONFIRMADA**: Reserva confirmada por el cliente
+  - **ACTIVA**: Cliente presente en el restaurante
+  - **COMPLETADA**: Reserva finalizada
+  - **CANCELADA**: Reserva cancelada
+
+  ## Respuesta
+  ```json
+  {
+    "content": [
+      {
+        "id": 1,
+        "cliente": {
+          "id": 1,
+          "nombre": "Juan Pérez",
+          "email": "juan@example.com"
+        },
+        "mesa": {
+          "id": 1,
+          "numeroMesa": "1",
+          "capacidad": 4
+        },
+        "fechaReserva": "2024-08-20T19:00:00",
+        "numeroComensales": 4,
+        "observaciones": "Cumpleaños",
+        "estado": "CONFIRMADA",
+        "fechaCreacion": "2024-08-15T10:00:00",
+        "fechaModificacion": "2024-08-15T11:00:00"
+      }
+    ],
+    "totalElements": 36,
+    "totalPages": 4,
+    "currentPage": 0
+  }
+  ```
+}
+

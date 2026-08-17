@@ -1,0 +1,35 @@
+meta {
+  name: Eliminar Mesa
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/mesas/{{mesa_id}}/eliminar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Eliminar Mesa
+
+  Elimina una mesa del sistema.
+
+  ## Parámetros de Ruta
+  - `mesa_id`: ID de la mesa a eliminar (ej: 1)
+
+  ## Restricciones
+  - Si la mesa tiene reservas activas, no se puede eliminar
+  - Se recomienda cambiar el estado a MANTENIMIENTO antes de eliminar
+
+  ## Respuesta
+  - **HTTP 200 OK**: Mesa eliminada exitosamente
+  - **HTTP 400 Bad Request**: Mesa no se puede eliminar (tiene reservas activas)
+  - **HTTP 404 Not Found**: Mesa no existe
+}
+

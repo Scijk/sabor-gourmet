@@ -1,0 +1,55 @@
+meta {
+  name: Crear Cliente
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/clientes
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "nombre": "Carlos García",
+    "email": "carlos.garcia@example.com",
+    "telefono": "9876543210",
+    "notas": "Nuevo cliente - Referencia Juan Pérez"
+  }
+}
+
+docs {
+  # Crear Cliente
+
+  Crea un nuevo cliente en el sistema.
+
+  ## Parámetros de Body (JSON)
+  - `nombre`: Nombre completo del cliente (requerido, máx 100 caracteres)
+  - `email`: Email único (requerido, formato válido)
+  - `telefono`: Teléfono de contacto (requerido, 10 dígitos)
+  - `notas`: Notas adicionales (opcional, máx 500 caracteres)
+
+  ## Validaciones
+  - El email debe ser único en el sistema
+  - El teléfono debe contener 10 dígitos
+  - El nombre no puede estar vacío
+
+  ## Respuesta
+  ```json
+  {
+    "id": 21,
+    "nombre": "Carlos García",
+    "email": "carlos.garcia@example.com",
+    "telefono": "9876543210",
+    "notas": "Nuevo cliente - Referencia Juan Pérez",
+    "fechaRegistro": "2024-08-16T14:30:00"
+  }
+  ```
+}
+

@@ -1,0 +1,61 @@
+meta {
+  name: Listar Mesas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/mesas
+  body: none
+  auth: none
+}
+
+query {
+  ~ page: 0
+  ~ size: 10
+  ~ sort: id,asc
+  ~ estado: DISPONIBLE
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Listar Mesas
+
+  Obtiene la lista paginada de todas las mesas registradas.
+
+  ## Parámetros de Query (Opcionales)
+  - `page`: Número de página (por defecto 0)
+  - `size`: Cantidad de registros por página (por defecto 10)
+  - `sort`: Campo y dirección de ordenamiento (ej: id,asc)
+  - `estado`: Filtrar por estado (DISPONIBLE, RESERVADA, OCUPADA, MANTENIMIENTO)
+
+  ## Respuesta
+  ```json
+  {
+    "content": [
+      {
+        "id": 1,
+        "numeroMesa": "1",
+        "capacidad": 4,
+        "ubicacion": "Sector A - Ventana",
+        "estado": "DISPONIBLE"
+      },
+      {
+        "id": 2,
+        "numeroMesa": "2",
+        "capacidad": 6,
+        "ubicacion": "Sector B",
+        "estado": "OCUPADA"
+      }
+    ],
+    "totalElements": 13,
+    "totalPages": 2,
+    "currentPage": 0
+  }
+  ```
+}
+

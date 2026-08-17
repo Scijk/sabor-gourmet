@@ -1,0 +1,72 @@
+meta {
+  name: Editar Reserva
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}
+  body: form-urlencoded
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+body:form-urlencoded {
+  clienteId: 1
+  mesaId: 2
+  fechaReserva: 2024-08-20T20:00:00
+  numeroComensales: 5
+  observaciones: Cumpleaños - Preferencia: mesa con vista
+}
+
+docs {
+  # Editar Reserva
+
+  Actualiza los datos de una reserva existente.
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a editar (ej: 1)
+
+  ## Parámetros de Body (Form-urlencoded)
+  - `clienteId`: ID del cliente (requerido)
+  - `mesaId`: ID de la mesa (requerido)
+  - `fechaReserva`: Fecha y hora actualizada (requerido)
+  - `numeroComensales`: Número actualizado de comensales (requerido)
+  - `observaciones`: Observaciones actualizadas (opcional)
+
+  ## Restricciones
+  - Solo se pueden editar reservas en estado PENDIENTE o CONFIRMADA
+  - La reserva no puede cambiar a una fecha pasada
+  - La mesa debe estar disponible en la nueva fecha/hora
+
+  ## Validaciones
+  - El cliente debe existir
+  - La mesa debe existir
+  - El número de comensales no puede exceder capacidad de la mesa
+  - No pueden haber conflictos de disponibilidad
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez"
+    },
+    "mesa": {
+      "id": 2,
+      "numeroMesa": "2",
+      "capacidad": 6
+    },
+    "fechaReserva": "2024-08-20T20:00:00",
+    "numeroComensales": 5,
+    "observaciones": "Cumpleaños - Preferencia: mesa con vista",
+    "estado": "CONFIRMADA",
+    "fechaModificacion": "2024-08-16T15:00:00"
+  }
+  ```
+}
+

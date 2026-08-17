@@ -1,0 +1,31 @@
+{
+  "version": "1",
+  "name": "Sabor Gourmet - API Collection",
+  "type": "collection",
+  "uid": "sabor-gourmet-api",
+  "environments": [
+    {
+      "uid": "local-dev",
+      "name": "Local Development",
+      "variables": {
+        "base_url": "http://localhost:8080/sabor-gourmet",
+        "api_base": "http://localhost:8080/sabor-gourmet/api",
+        "cliente_id": "1",
+        "mesa_id": "1",
+        "reserva_id": "1"
+      }
+    },
+    {
+      "uid": "production",
+      "name": "Production",
+      "variables": {
+        "base_url": "https://api.saborgourmet.com/sabor-gourmet",
+        "api_base": "https://api.saborgourmet.com/sabor-gourmet/api",
+        "cliente_id": "1",
+        "mesa_id": "1",
+        "reserva_id": "1"
+      }
+    }
+  ]
+}
+

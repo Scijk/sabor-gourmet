@@ -1,0 +1,43 @@
+meta {
+  name: Dashboard - Home
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+  User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+}
+
+docs {
+  # Dashboard - Página de Inicio
+
+  Obtiene la página principal del dashboard con estadísticas en tiempo real.
+
+  ## Respuesta
+  - **HTTP 200 OK**: Página HTML del dashboard con:
+    - Estadísticas de reservas
+    - Conteo de clientes
+    - Disponibilidad de mesas
+    - Reservas pendientes de confirmación
+    - Accesos rápidos
+    - Gráficos de ocupación
+
+  ## Información Mostrada
+  - Total de clientes registrados
+  - Total de mesas disponibles
+  - Reservas pendientes
+  - Reservas confirmadas próximas
+  - Mesas ocupadas actualmente
+  - Historial reciente de actividades
+
+  ## Nota
+  Este es un endpoint web que devuelve HTML. Para testing de API, usar los endpoints REST de `/clientes`, `/mesas`, `/reservas`.
+}
+

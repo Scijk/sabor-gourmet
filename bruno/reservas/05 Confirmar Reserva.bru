@@ -1,0 +1,56 @@
+meta {
+  name: Confirmar Reserva
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}/confirmar
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Confirmar Reserva
+
+  Cambia el estado de una reserva de PENDIENTE a CONFIRMADA.
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a confirmar (ej: 1)
+
+  ## Flujo de Estados
+  - PENDIENTE → **CONFIRMADA**
+
+  ## Restricciones
+  - La reserva debe estar en estado PENDIENTE
+  - La mesa debe estar disponible en esa fecha/hora
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez"
+    },
+    "mesa": {
+      "id": 1,
+      "numeroMesa": "1"
+    },
+    "fechaReserva": "2024-08-20T19:00:00",
+    "numeroComensales": 4,
+    "estado": "CONFIRMADA",
+    "fechaModificacion": "2024-08-16T15:00:00"
+  }
+  ```
+
+  ## Errores Posibles
+  - **HTTP 400 Bad Request**: Reserva no está en estado PENDIENTE
+  - **HTTP 404 Not Found**: Reserva no existe
+}
+

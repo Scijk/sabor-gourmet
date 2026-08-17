@@ -1,0 +1,71 @@
+meta {
+  name: Cancelar Reserva
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/reservas/{{reserva_id}}/cancelar
+  body: form-urlencoded
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+body:form-urlencoded {
+  motivoCancelacion: El cliente llamó para cancelar - Cambio de planes
+}
+
+docs {
+  # Cancelar Reserva
+
+  Cambia el estado de una reserva a CANCELADA.
+
+  ## Parámetros de Ruta
+  - `reserva_id`: ID de la reserva a cancelar (ej: 1)
+
+  ## Parámetros de Body (Form-urlencoded)
+  - `motivoCancelacion`: Motivo de la cancelación (opcional, máx 500 caracteres)
+
+  ## Flujo de Estados
+  - PENDIENTE o CONFIRMADA → **CANCELADA**
+
+  ## Acciones Asociadas
+  - La mesa regresa a estado DISPONIBLE (si estaba reservada)
+  - Se registra la fecha y hora de cancelación
+  - Se guarda el motivo de cancelación
+  - La reserva se marca en historial como cancelada
+
+  ## Restricciones
+  - La reserva NO puede estar en estado ACTIVA o COMPLETADA
+  - No se pueden cancelar reservas pasadas
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "cliente": {
+      "id": 1,
+      "nombre": "Juan Pérez"
+    },
+    "mesa": {
+      "id": 1,
+      "numeroMesa": "1",
+      "estado": "DISPONIBLE"
+    },
+    "fechaReserva": "2024-08-20T19:00:00",
+    "numeroComensales": 4,
+    "estado": "CANCELADA",
+    "fechaCancelacion": "2024-08-16T16:00:00",
+    "motivoCancelacion": "El cliente llamó para cancelar - Cambio de planes",
+    "fechaModificacion": "2024-08-16T16:00:00"
+  }
+  ```
+
+  ## Errores Posibles
+  - **HTTP 400 Bad Request**: Reserva no puede ser cancelada (estado ACTIVA/COMPLETADA)
+  - **HTTP 404 Not Found**: Reserva no existe
+}
+

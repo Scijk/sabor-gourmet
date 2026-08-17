@@ -1,0 +1,37 @@
+meta {
+  name: Obtener Mesa por ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/mesas/{{mesa_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+docs {
+  # Obtener Mesa por ID
+
+  Obtiene los detalles de una mesa específica.
+
+  ## Parámetros de Ruta
+  - `mesa_id`: ID de la mesa (ej: 1)
+
+  ## Respuesta
+  ```json
+  {
+    "id": 1,
+    "numeroMesa": "1",
+    "capacidad": 4,
+    "ubicacion": "Sector A - Ventana",
+    "estado": "DISPONIBLE"
+  }
+  ```
+}
+

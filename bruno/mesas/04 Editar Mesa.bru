@@ -1,0 +1,52 @@
+meta {
+  name: Editar Mesa
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/mesas/{{mesa_id}}
+  body: form-urlencoded
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+body:form-urlencoded {
+  numeroMesa: 1-Updated
+  capacidad: 6
+  ubicacion: Sector A - Ventana - Ubicación Premium
+}
+
+docs {
+  # Editar Mesa
+
+  Actualiza los datos de una mesa existente.
+
+  ## Parámetros de Ruta
+  - `mesa_id`: ID de la mesa a editar (ej: 1)
+
+  ## Parámetros de Body (Form-urlencoded)
+  - `numeroMesa`: Número de mesa actualizado (requerido, debe ser único)
+  - `capacidad`: Capacidad actualizada (requerido, 1-20)
+  - `ubicacion`: Ubicación actualizada (opcional)
+
+  ## Validaciones
+  - La mesa debe existir
+  - El número debe ser único (excepto el actual)
+  - La capacidad debe estar entre 1 y 20
+
+  ## Respuesta (HTTP 200 OK)
+  ```json
+  {
+    "id": 1,
+    "numeroMesa": "1-Updated",
+    "capacidad": 6,
+    "ubicacion": "Sector A - Ventana - Ubicación Premium",
+    "estado": "DISPONIBLE"
+  }
+  ```
+}
+
