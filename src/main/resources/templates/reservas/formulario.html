@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Reserva - Sabor Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d4a574;
+            --secondary-color: #2c3e50;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #c9935d;
+            border-color: #c9935d;
+        }
+
+        .alert {
+            border-radius: 4px;
+            border: none;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f5;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/sabor-gourmet/">
+                <i class="fas fa-utensils" style="color: var(--primary-color);"></i> Sabor Gourmet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/sabor-gourmet/reservas">
+                            <i class="fas fa-calendar-alt"></i> Reservas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/clientes">
+                            <i class="fas fa-users"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/mesas">
+                            <i class="fas fa-table"></i> Mesas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-calendar-plus"></i> Nueva Reserva</h1>
+            <p class="mb-0">Crea una nueva reserva para un cliente</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div th:if="${error}" class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+                </div>
+
+                <div class="form-card">
+                    <form method="post" th:action="@{/reservas}">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="clienteId">Cliente *</label>
+                                    <select class="form-select" id="clienteId" name="clienteId" required>
+                                        <option value="">Selecciona un cliente</option>
+                                        <option th:each="cliente : ${clientes}" 
+                                                th:value="${cliente.id}"
+                                                th:text="${cliente.nombre} + ' (' + ${cliente.email} + ')'">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="mesaId">Mesa *</label>
+                                    <select class="form-select" id="mesaId" name="mesaId" required>
+                                        <option value="">Selecciona una mesa</option>
+                                        <option th:each="mesa : ${mesas}" 
+                                                th:value="${mesa.id}"
+                                                th:text="${mesa.numeroMesa} + ' (Capacidad: ' + ${mesa.capacidad} + ')'">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="fechaReserva">Fecha y Hora *</label>
+                                    <input type="datetime-local" class="form-control" id="fechaReserva" 
+                                           name="fechaReserva" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="numeroComensales">Número de Comensales *</label>
+                                    <input type="number" class="form-control" id="numeroComensales" 
+                                           name="numeroComensales" min="1" max="20" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="observaciones">Observaciones</label>
+                            <textarea class="form-control" id="observaciones" name="observaciones" 
+                                     rows="3" placeholder="Notas adicionales..."></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Crear Reserva
+                            </button>
+                            <a href="/sabor-gourmet/reservas" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--secondary-color); color: #ecf0f1; padding: 20px 0; margin-top: 40px; text-align: center; border-top: 3px solid var(--primary-color);">
+        <div class="container-fluid">
+            <p class="mb-0">
+                <i class="fas fa-copyright"></i> Sabor Gourmet - Sistema de Reservas
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set minimum datetime to now
+        document.getElementById('fechaReserva').addEventListener('DOMContentLoaded', function() {
+            const now = new Date().toISOString().slice(0, 16);
+            document.getElementById('fechaReserva').min = now;
+        });
+
+        // Initialize
+        const now = new Date().toISOString().slice(0, 16);
+        document.getElementById('fechaReserva').min = now;
+    </script>
+</body>
+</html>

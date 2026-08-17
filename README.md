@@ -105,17 +105,22 @@ sabor-gourmet/
    java -version
    ```
 
-2. **PostgreSQL 12 o superior**
+2. **PostgreSQL 12 o superior** (O usar Docker - ver abajo)
    ```bash
    psql --version
    ```
 
-3. **Maven 3.6 o superior**
+3. **Docker (Opcional - Recomendado para desarrollo)**
+   ```bash
+   docker --version
+   ```
+
+4. **Maven 3.6 o superior**
    ```bash
    mvn --version
    ```
 
-4. **Git**
+5. **Git**
    ```bash
    git --version
    ```
@@ -164,6 +169,24 @@ psql -U postgres
 \i 'D:/Desarrollo/Repos/sabor-gourmet/database/02-seed-data.sql'
 ```
 
+#### ⭐ Opción C: Usando Docker (Recomendado)
+
+En la raíz del proyecto, ejecutar:
+
+```bash
+# Levantar el contenedor PostgreSQL
+docker compose up -d
+
+# Verificar que está listo (esperar 5-10 segundos)
+docker compose logs -f db
+
+# Los scripts se ejecutan automáticamente en el primer inicio
+# Para verificar que todo está correcto:
+docker exec -it sabor_gourmet_db psql -U postgres -d sabor_gourmet_db -c "SELECT COUNT(*) as total_clientes FROM clientes;"
+```
+
+**Ventaja**: Los scripts `01-init-schema.sql` y `02-seed-data.sql` se ejecutan automáticamente. Sin instalación de PostgreSQL requerida.
+
 ### 3. Configurar Credenciales de Base de Datos
 
 Editar el archivo `src/main/resources/application.properties`:
@@ -195,6 +218,8 @@ java -jar target/sabor-gourmet-reservas-1.0.0.jar
 Abrir el navegador y acceder a:
 - **URL**: `http://localhost:8080/sabor-gourmet`
 - **Dashboard**: `http://localhost:8080/sabor-gourmet/`
+
+> Nota importante: la aplicación configura el `context-path` en `src/main/resources/application.properties` con `server.servlet.context-path=/sabor-gourmet`. Para evitar rutas duplicadas del tipo `/sabor-gourmet/sabor-gourmet`, en las vistas usa Thymeleaf con `@{...}` en lugar de concatenar el prefijo a mano.
 
 ---
 
@@ -369,6 +394,7 @@ Abrir el navegador y acceder a:
 | Ver detalles | `/sabor-gourmet/reservas/{id}` | GET |
 | Crear | `/sabor-gourmet/reservas` | POST |
 | Editar | `/sabor-gourmet/reservas/{id}` | POST |
+| Panel administrativo | `/sabor-gourmet/reservas/admin` | GET |
 | Confirmar | `/sabor-gourmet/reservas/{id}/confirmar` | POST |
 | Activar | `/sabor-gourmet/reservas/{id}/activar` | POST |
 | Completar | `/sabor-gourmet/reservas/{id}/completar` | POST |

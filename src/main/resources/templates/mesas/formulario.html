@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa - Sabor Gourmet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #d4a574;
+            --secondary-color: #2c3e50;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(212, 165, 116, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #c9935d;
+            border-color: #c9935d;
+        }
+
+        .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body style="background-color: #f5f5f5;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/sabor-gourmet/">
+                <i class="fas fa-utensils" style="color: var(--primary-color);"></i> Sabor Gourmet
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/reservas">
+                            <i class="fas fa-calendar-alt"></i> Reservas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/sabor-gourmet/clientes">
+                            <i class="fas fa-users"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/sabor-gourmet/mesas">
+                            <i class="fas fa-table"></i> Mesas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1 th:if="${mesa.id == null}">
+                <i class="fas fa-chair"></i> Nueva Mesa
+            </h1>
+            <h1 th:if="${mesa.id != null}">
+                <i class="fas fa-chair"></i> Editar Mesa
+            </h1>
+            <p class="mb-0">Configura los detalles de la mesa</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3">
+                <div class="form-card">
+                    <form th:method="${mesa.id == null ? 'post' : 'post'}"
+                          th:action="${mesa.id == null ? '/sabor-gourmet/mesas' : '/sabor-gourmet/mesas/' + mesa.id}"
+                          method="post" th:object="${mesa}">
+                        
+                        <div class="form-group mb-3">
+                            <label for="numeroMesa">Número de Mesa *</label>
+                            <input type="text" class="form-control" id="numeroMesa" 
+                                   th:field="*{numeroMesa}" placeholder="1, 2, 3..." required
+                                   th:classappend="${#fields.hasErrors('numeroMesa') ? 'is-invalid' : ''}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroMesa')}">
+                                <span th:errors="*{numeroMesa}"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="capacidad">Capacidad (Personas) *</label>
+                            <input type="number" class="form-control" id="capacidad" 
+                                   th:field="*{capacidad}" min="1" max="20" required
+                                   th:classappend="${#fields.hasErrors('capacidad') ? 'is-invalid' : ''}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('capacidad')}">
+                                <span th:errors="*{capacidad}"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="ubicacion">Ubicación</label>
+                            <input type="text" class="form-control" id="ubicacion" 
+                                   th:field="*{ubicacion}" placeholder="Ventana, Esquina, Centro...">
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="estado">Estado *</label>
+                            <select class="form-select" id="estado" th:field="*{estado}" required
+                                   th:classappend="${#fields.hasErrors('estado') ? 'is-invalid' : ''}">
+                                <option value="">Selecciona un estado</option>
+                                <option th:each="estado : ${estados}" 
+                                        th:value="${estado}" 
+                                        th:text="${estado.name()}">
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('estado')}">
+                                <span th:errors="*{estado}"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> 
+                                <span th:if="${mesa.id == null}">Crear Mesa</span>
+                                <span th:if="${mesa.id != null}">Actualizar Mesa</span>
+                            </button>
+                            <a href="/sabor-gourmet/mesas" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--secondary-color); color: #ecf0f1; padding: 20px 0; margin-top: 40px; text-align: center; border-top: 3px solid var(--primary-color);">
+        <div class="container-fluid">
+            <p class="mb-0">
+                <i class="fas fa-copyright"></i> Sabor Gourmet - Sistema de Reservas
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
